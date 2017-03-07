@@ -2,6 +2,8 @@ package dev.notify;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,13 +16,17 @@ import android.widget.EditText;
 import java.io.IOException;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.R.attr.value;
+import static dev.notify.R.string.firstname;
+import static dev.notify.R.string.lastname;
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
     EditText firstnameEditText;
@@ -93,7 +99,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             cancel = true;
         }
         if(TextUtils.isEmpty(tel)){
-            telEditText.setError("Fill this form");
+            telEditText.setError("Fill this field");
             focusView = telEditText;
             cancel = true;
         }
@@ -127,23 +133,67 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             focusView.requestFocus();
         }
         else{
-            showProgress(true);
-            PostDataRegister postData = new PostDataRegister();
-            String json = postData.dataToJson(firstname, lastname, tel, email, username, password);
-            Log.i("JSON",json);
-
-            String response = null;
-            try {
-                response = postData.post("http://0.0.0.0:3000/api/Members", json);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Log.i("Response", response);
-            showProgress(false);
+            String json = dataToJson(firstname, lastname, tel, email, username, password);
+            postData(json);
 
         }
 
+    }
+
+    private String dataToJson(String firstname, String lastname, String tel, String email, String username, String password) {
+        return "{" +
+                "\"firstname\":\"" + firstname + "\","+
+                "\"lastname\" : \"" + lastname + "\"," +
+                "\"tel\" : \"" + tel + "\","+
+                "\"email\" : \"" + email + "\","+
+                "\"username\" : \"" + username + "\"," +
+                "\"password\" : \"" + password + "\","+
+                "\"admin\" : \"0\" "+
+                "}";
+    }
+
+    private void postData(String json) {
+        String url = "http://192.168.1.9:3000/api/Members";
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("DebugFail", e.getMessage());
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                Log.i("Debug", response.body().string());
+                int statusCode = response.code();
+                if(statusCode == 200){
+                    Log.i("StatusCode", String.valueOf(statusCode));
+                    Register.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(Register.this, Login.class));
+                        }
+                    });
+
+                }
+                else if (statusCode == 500){
+                    Log.i("StatusCode", String.valueOf(statusCode));
+                    Register.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            usernameEditText.setError("This username is used");
+                            View focusView = usernameEditText;
+                            focusView.requestFocus();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 
