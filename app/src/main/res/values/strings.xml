@@ -9,4 +9,8 @@
     <string name="tel">Mobile Phone Number</string>
     <string name="comfirmPassword">Comfirm Password</string>
     <string name="register">Register</string>
+    <string name="signinBTN">Sign In</string>
+    <string name="title_activity_show_item">showItem</string>
+    <string name="title_activity_main_page">MainPage</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

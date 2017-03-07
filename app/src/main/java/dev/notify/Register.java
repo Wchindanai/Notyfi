@@ -169,7 +169,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                Log.i("Debug", response.body().string());
                 int statusCode = response.code();
                 if(statusCode == 200){
                     Log.i("StatusCode", String.valueOf(statusCode));
