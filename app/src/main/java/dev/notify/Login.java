@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    private void getLogin(String username, String password) {
+    private void getLogin(final String username, String password) {
         String json = dataToJson(username,password);
         String url = "http://192.168.1.9:3000/api/Members/count?where="+json;
         OkHttpClient client = new OkHttpClient();
@@ -110,10 +110,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     }
                     else{
                         //Success Login
+
+                        //Go to admin page
+                        if(username == "admin"){
+                            Login.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(Login.this, Admin.class));
+                                }
+                            });
+                        }
                         Login.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(Login.this, ShowItem.class));
+                                startActivity(new Intent(Login.this, Member.class));
                             }
                         });
                     }

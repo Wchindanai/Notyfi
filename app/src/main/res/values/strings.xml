@@ -13,4 +13,8 @@
     <string name="title_activity_show_item">showItem</string>
     <string name="title_activity_main_page">MainPage</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="item_label_name">ชื่อ : </string>
+    <string name="item_label_amount">จำนวน : </string>
+    <string name="item_label_member">เจ้าของ : </string>
+    <string name="item_label_date">วันที่ : </string>
 </resources>
