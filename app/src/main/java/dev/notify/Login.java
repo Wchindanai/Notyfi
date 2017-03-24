@@ -81,7 +81,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void getLogin(final String username, String password) {
         String json = dataToJson(username,password);
-        String url = "http://192.168.1.9:3000/api/Members/count?where="+json;
+        String url = "http://192.168.1.49:3000/api/Members/count?where="+json;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -95,6 +95,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
                 String jsonData = response.body().string();
                 JSONObject json = null;
+                Log.i("Json", jsonData);
                 try {
                     json = new JSONObject(jsonData);
                     String count = json.getString("count");
