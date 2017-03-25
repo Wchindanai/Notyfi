@@ -34,8 +34,8 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
             cv = (CardView) view.findViewById(R.id.cardView);
             data_name = (TextView) view.findViewById(R.id.data_name);
             data_amount = (TextView) view.findViewById(R.id.data_amount);
-            data_date = (TextView) view.findViewById(R.id.data_date);
-            data_member = (TextView) view.findViewById(R.id.data_date);
+            data_date = (TextView) view.findViewById(R.id.data_created);
+            data_member = (TextView) view.findViewById(R.id.data_member);
         }
     }
 

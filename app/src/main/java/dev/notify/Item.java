@@ -8,12 +8,21 @@ public class Item {
     private String name, date, member;
     private int amount;
 
+    /**
+     *
+     */
     public Item(){}
 
+    /**
+     * @param name
+     * @param date
+     * @param amount
+     * @param member
+     */
     public Item(String name, String date, int amount, String member){
         this.name = name;
-        this.date = date;
         this.amount = amount;
+        this.date = date;
         this.member = member;
     }
 
