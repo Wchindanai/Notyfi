@@ -153,7 +153,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void postData(String json) {
-        String url = "http://192.168.1.9:3000/api/Members";
+        String url = "https://notify-160811.appspot.com/api/Members";
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, json);

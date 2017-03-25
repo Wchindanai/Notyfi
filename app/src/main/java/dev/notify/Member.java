@@ -1,5 +1,6 @@
 package dev.notify;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,8 @@ public class Member extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member);
+
+
         
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
@@ -31,7 +34,22 @@ public class Member extends AppCompatActivity {
         mAdapter = new ItemAdapter(Member.this, itemList);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Authentication App
+        if(!auth()){
+            startActivity(new Intent(Member.this, Login.class));
+        }
         getData();
+    }
+
+    private boolean auth() {
+        boolean auth;
+        auth = getIntent().getExtras().getBoolean("auth", false);
+        if(auth){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     private void getData() {

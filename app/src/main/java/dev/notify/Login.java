@@ -81,7 +81,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void getLogin(final String username, String password) {
         String json = dataToJson(username,password);
-        String url = "http://192.168.1.49:3000/api/Members/count?where="+json;
+        String url = "https://notify-160811.appspot.com/api/Members/count?where="+json;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -117,16 +117,25 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             Login.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(Login.this, Admin.class));
+                                    Intent intent = new Intent(Login.this, Admin.class);
+                                    intent.putExtra("auth", true);
+                                    intent.putExtra("member", username);
+                                    startActivity(intent);
                                 }
                             });
                         }
-                        Login.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(Login.this, Member.class));
-                            }
-                        });
+                        else {
+                            Login.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(Login.this, Member.class);
+                                    intent.putExtra("auth", true);
+                                    intent.putExtra("member", username);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
