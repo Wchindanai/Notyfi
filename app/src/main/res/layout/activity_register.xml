@@ -19,10 +19,7 @@
             android:id="@+id/register_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
-            android:layout_height="482dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <ScrollView
@@ -44,6 +41,8 @@
                         android:id="@+id/firstnameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
                         android:hint="@string/firstname" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -55,7 +54,10 @@
                         android:id="@+id/lastnameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
                         android:hint="@string/lastname" />
+
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -65,7 +67,9 @@
                     <EditText
                         android:id="@+id/emailEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
                         android:hint="@string/email" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -77,6 +81,8 @@
                         android:id="@+id/telEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:maxLines="1"
                         android:hint="@string/tel" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -88,6 +94,8 @@
                         android:id="@+id/usernameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
                         android:hint="@string/username" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -100,7 +108,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:ems="10"
                         android:hint="@string/password"
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
@@ -130,4 +137,5 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+    
 </RelativeLayout>

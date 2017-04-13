@@ -17,7 +17,8 @@
         android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        tools:ignore="ContentDescription" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator"

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Notify</string>
+
     <string name="username">Username</string>
     <string name="password">Password</string>
-
     <string name="firstname">Firstname</string>
     <string name="lastname">Lastname</string>
     <string name="email">Email</string>
@@ -20,4 +20,6 @@
     <string name="editBtn">Edit Your Item</string>
     <string name="deleteBtn">Delete Your Item</string>
     <string name="pictureLabel">Picture</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="history">History</string>
 </resources>

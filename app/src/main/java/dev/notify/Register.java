@@ -3,32 +3,29 @@ package dev.notify;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.nfc.Tag;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.R.attr.value;
-import static dev.notify.R.string.firstname;
-import static dev.notify.R.string.lastname;
-
-public class Register extends AppCompatActivity implements View.OnClickListener{
+public class Register extends AppCompatActivity {
+    private static final String TAG = "Register";
     EditText firstnameEditText;
     EditText lastnameEditText;
     EditText emailEditText;
@@ -54,17 +51,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         registerBtn = (Button)findViewById(R.id.registerBtn);
         registerForm = findViewById(R.id.register_form);
         registerProgress = findViewById(R.id.register_progress);
-        registerBtn.setOnClickListener(this);
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerMember();
+            }
+        });
 
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.registerBtn : registerMember(); break;
-        }
-    }
 
     public void registerMember(){
         String firstname = firstnameEditText.getText().toString();
@@ -133,30 +130,36 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             focusView.requestFocus();
         }
         else{
-            String json = dataToJson(firstname, lastname, tel, email, username, password);
+            showProgress(true);
+            JSONObject json = setJsonObject(firstname, lastname, tel, email, username, password);
             postData(json);
 
         }
 
     }
 
-    private String dataToJson(String firstname, String lastname, String tel, String email, String username, String password) {
-        return "{" +
-                "\"firstname\":\"" + firstname + "\","+
-                "\"lastname\" : \"" + lastname + "\"," +
-                "\"tel\" : \"" + tel + "\","+
-                "\"email\" : \"" + email + "\","+
-                "\"username\" : \"" + username + "\"," +
-                "\"password\" : \"" + password + "\","+
-                "\"admin\" : \"0\" "+
-                "}";
+    private JSONObject setJsonObject(String firstname, String lastname, String tel, String email, String username, String password) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("username", username);
+            jsonObject.put("password", password);
+            jsonObject.put("first_name", firstname);
+            jsonObject.put("last_name", lastname);
+            jsonObject.put("email", email);
+            jsonObject.put("mobile_no", tel);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+
     }
 
-    private void postData(String json) {
-        String url = "https://notify-160811.appspot.com/api/Members";
+
+    private void postData(JSONObject json) {
+        String url = "https://notify-163706.appspot.com/api/users";
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, json);
+        RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -165,6 +168,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+
                 Log.i("DebugFail", e.getMessage());
             }
             @Override
@@ -175,17 +179,19 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     Register.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(new Intent(Register.this, Login.class));
+                            startActivity(new Intent(getApplicationContext(), Login.class));
+                            finish();
                         }
                     });
 
                 }
                 else if (statusCode == 500){
+                    showProgress(false);
                     Log.i("StatusCode", String.valueOf(statusCode));
                     Register.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            usernameEditText.setError("This username is used");
+                            usernameEditText.setError("This username Or Email is used");
                             View focusView = usernameEditText;
                             focusView.requestFocus();
                         }
@@ -216,16 +222,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     }
 
     private boolean isValidPassword(String password, String confirmPassword){
-        if( password.equals(confirmPassword)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return password.equals(confirmPassword);
     }
 
     private boolean isTelValid(String tel) {
-        return tel.length() < 9;
+        return tel.length() > 9;
     }
 
     private boolean isEmailValid(String email) {
