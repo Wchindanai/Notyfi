@@ -1,15 +1,18 @@
 package dev.notify;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.CardView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
 
 /**
  * Created by dream on 3/25/2017 AD.
@@ -17,21 +20,22 @@ import java.util.List;
 
 class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
     private List<Item> itemList;
-    private Context mContext;
+    private Context context;
 
-    public ItemAdapter(Context context, List<Item> itemList){
-        this.mContext = context;
+    ItemAdapter(Context context, List<Item> itemList){
+        this.context = context;
         this.itemList = itemList;
     }
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView data_name, data_amount, data_date, data_member;
-        CardView cv;
+        TextView data_name, data_amount, data_date, data_member;
+        ImageView data_image;
 
-        public MyViewHolder(View view) {
+
+        MyViewHolder(View view) {
             super(view);
-            cv = (CardView) view.findViewById(R.id.cardView);
+            data_image = (ImageView) view.findViewById(R.id.imageItem);
             data_name = (TextView) view.findViewById(R.id.data_name);
             data_amount = (TextView) view.findViewById(R.id.data_amount);
             data_date = (TextView) view.findViewById(R.id.data_created);
@@ -42,18 +46,28 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View View = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cardview, null);
-        MyViewHolder viewHolder = new MyViewHolder(View);
-        return viewHolder;
+        View View = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cardview, parent, false);
+        return new MyViewHolder(View);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Item item = itemList.get(position);
-        holder.data_name.setText(item.getName());
-        holder.data_amount.setText(String.valueOf(item.getAmount()));
-        holder.data_date.setText(item.getDate());
-        holder.data_member.setText(item.getMember());
+
+        holder.data_name.setText(itemList.get(position).getName());
+        holder.data_amount.setText(String.valueOf(itemList.get(position).getAmount()));
+        holder.data_date.setText(itemList.get(position).getDate());
+        holder.data_member.setText(itemList.get(position).getMember());
+
+        //Encode Image And SetImage
+        String stringEncodeImage = itemList.get(position).getImage();
+        byte[] decodeImage = Base64.decode(stringEncodeImage, Base64.DEFAULT);
+        Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
+
+        //Set Image
+        holder.data_image.setImageBitmap(bitmapImage);
+
+
+
 
     }
 

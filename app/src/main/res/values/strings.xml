@@ -22,4 +22,11 @@
     <string name="pictureLabel">Picture</string>
     <string name="sign_out">Sign Out</string>
     <string name="history">History</string>
+    <string name="add_item">Add Item</string>
+    <string name="item_name">ชื่อสิ่งของ</string>
+    <string name="item_amount">จำนวน</string>
+    <string name="item_expire">วันหมดอายุ</string>
+    <string name="notify">แจ้งเตือนวันที่</string>
+    <string name="image">กรุณาเลือกรูปภาพ</string>
+    <string name="users">ชื่อคนลงทะเบียน</string>
 </resources>

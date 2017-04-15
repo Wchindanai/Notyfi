@@ -5,25 +5,24 @@ package dev.notify;
  */
 
 public class Item {
-    private String name, date, member;
+    private String name, date, member, image;
     private int amount;
 
-    /**
-     *
-     */
-    public Item(){}
+
 
     /**
      * @param name
      * @param date
      * @param amount
      * @param member
+     * @param image
      */
-    public Item(String name, String date, int amount, String member){
+    public Item(String name, String date, int amount, String member, String image){
         this.name = name;
         this.amount = amount;
         this.date = date;
         this.member = member;
+        this.image = image;
     }
 
     public String getName(){
@@ -56,5 +55,13 @@ public class Item {
 
     public void setMember(String member) {
         this.member = member;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
