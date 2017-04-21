@@ -29,4 +29,9 @@
     <string name="notify">แจ้งเตือนวันที่</string>
     <string name="image">กรุณาเลือกรูปภาพ</string>
     <string name="users">ชื่อคนลงทะเบียน</string>
+    <string name="add_item_button">เพิ่ม</string>
+    <string name="image_view">รูปของคุณ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

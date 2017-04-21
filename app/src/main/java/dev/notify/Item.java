@@ -5,22 +5,30 @@ package dev.notify;
  */
 
 public class Item {
-    private String name, date, member, image;
+    private String name, expire, member, image;
     private int amount;
 
 
+    public String getExpire() {
+        return expire;
+    }
+
+    public void setExpire(String expire) {
+        this.expire = expire;
+    }
 
     /**
      * @param name
-     * @param date
+     * @param expire
      * @param amount
      * @param member
      * @param image
+     * @param expire
      */
-    public Item(String name, String date, int amount, String member, String image){
+    public Item(String name, int amount, String member, String image, String expire){
         this.name = name;
         this.amount = amount;
-        this.date = date;
+        this.expire = expire;
         this.member = member;
         this.image = image;
     }
@@ -33,13 +41,6 @@ public class Item {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public int getAmount() {
         return amount;
