@@ -55,7 +55,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
 
         holder.data_name.setText(itemList.get(position).getName());
         holder.data_amount.setText(String.valueOf(itemList.get(position).getAmount()));
-        holder.data_date.setText(itemList.get(position).getDate());
+        holder.data_date.setText(itemList.get(position).getExpire());
         holder.data_member.setText(itemList.get(position).getMember());
 
         //Encode Image And SetImage

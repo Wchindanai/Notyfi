@@ -11,9 +11,12 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -31,14 +34,18 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class AddItem extends AppCompatActivity {
@@ -54,6 +61,7 @@ public class AddItem extends AppCompatActivity {
     Button pickImage;
     Button add;
     ImageView itemImage;
+    CoordinatorLayout coordinator;
 
     int year, month, day;
     String user;
@@ -76,6 +84,7 @@ public class AddItem extends AppCompatActivity {
         pickImage = (Button) findViewById(R.id.pickImage);
         add = (Button) findViewById(R.id.addItem);
         itemImage = (ImageView) findViewById(R.id.imageView);
+        coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
 
         SharedPreferences sharedPreferences = getSharedPreferences("notify", Context.MODE_PRIVATE);
         ;
@@ -140,10 +149,8 @@ public class AddItem extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            Date expireDate = new SimpleDateFormat("yyyy-MM-dd").parse(expire);
 
-
-            Item item = new Item(name, amount, member, _rawImage, expireDate.toString());
+            Item item = new Item(name, amount, member, _rawImage, expire);
 
             try {
                 sentToServer(item);
@@ -160,14 +167,41 @@ public class AddItem extends AppCompatActivity {
         JSONObject json = new JSONObject();
         json.put("name", item.getName());
         json.put("amount", item.getAmount());
-        json.put("expire", item.getExpire());
-        json.put("picture", item.getImage());
+        json.put("expire_date", item.getExpire());
         json.put("users_username", item.getMember());
+        json.put("picture", item.getImage());
         RequestBody body = RequestBody.create(JSON, json.toString());
+        Log.d(TAG, "sentToServer: "+json.toString());
         Request request = new Request.Builder()
                 .url("https://notify-163706.appspot.com/api/items")
                 .post(body)
                 .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                AddItem.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar snackbar = Snackbar.make(coordinator, "Cannot Add Item", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                });
+                Log.e("onFailure", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d(TAG, "onResponse: "+ response.body() +" "+response.toString());
+                AddItem.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), Member.class));
+                        finish();
+                    }
+                });
+            }
+        });
+
     }
 
     private void imagePicker() {
@@ -197,9 +231,9 @@ public class AddItem extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int selectYear, int selectMonth, int selectDayOfMonth) {
             year = selectYear;
-            month = selectMonth;
+            month = selectMonth+1;
             day = selectDayOfMonth;
-            String strDate = "" + day + "-" + month + "-" + year;
+            String strDate = year + "-" + "0" + month + "-" + day;
             itemNotification.setText(strDate);
         }
     };
@@ -223,9 +257,9 @@ public class AddItem extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int selectYear, int selectMonth, int selectDayOfMonth) {
             year = selectYear;
-            month = selectMonth;
+            month = selectMonth+1;
             day = selectDayOfMonth;
-            String strDate = "" + day + "-" + month + "-" + year;
+            String strDate = year + "-" + "0" + month + "-" + day;
             itemExpire.setText(strDate);
         }
     };
