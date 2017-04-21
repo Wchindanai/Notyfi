@@ -13,8 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Member extends AppCompatActivity {
     private static final String TAG = "Member";
@@ -44,6 +56,8 @@ public class Member extends AppCompatActivity {
         mAdapter = new ItemAdapter(Member.this, itemList);
         mRecyclerView.setAdapter(mAdapter);
 
+        getItemToRecycler();
+
         addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +65,34 @@ public class Member extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void getItemToRecycler() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://notify-163706.appspot.com/api/items")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "onFailure: ",e );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    for (int i = 0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Log.d(TAG, "onResponse: "+ jsonObject.toString());
+                        Item item = new Item(jsonObject.getString("name"), jsonObject.getInt("amount"), jsonObject.getString("users_member"), jsonObject.getString("picture"), jsonObject.getString("expire_date"));
+                        itemList.add(item);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
