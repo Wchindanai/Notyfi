@@ -16,7 +16,7 @@
     <string name="item_label_name">ชื่อ : </string>
     <string name="item_label_amount">จำนวน : </string>
     <string name="item_label_member">เจ้าของ : </string>
-    <string name="item_label_date">วันที่ : </string>
+    <string name="item_label_date">วันหมดอายุ : </string>
     <string name="editBtn">Edit Your Item</string>
     <string name="deleteBtn">Delete Your Item</string>
     <string name="pictureLabel">Picture</string>

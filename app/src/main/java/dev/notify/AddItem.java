@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -150,7 +148,7 @@ public class AddItem extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            Item item = new Item(name, amount, member, _rawImage, expire);
+            Item item = new Item(0, name, amount, member, _rawImage, expire);
 
             try {
                 sentToServer(item);
@@ -171,7 +169,6 @@ public class AddItem extends AppCompatActivity {
         json.put("users_username", item.getMember());
         json.put("picture", item.getImage());
         RequestBody body = RequestBody.create(JSON, json.toString());
-        Log.d(TAG, "sentToServer: "+json.toString());
         Request request = new Request.Builder()
                 .url("https://notify-163706.appspot.com/api/items")
                 .post(body)
@@ -191,7 +188,12 @@ public class AddItem extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "onResponse: "+ response.body() +" "+response.toString());
+                Log.d(TAG, "onResponse: "+ response.body().string());
+                try {
+                    JSONObject jsonResponse = new JSONObject(response.body().string());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 AddItem.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -268,13 +270,10 @@ public class AddItem extends AppCompatActivity {
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
             ArrayList<Image> images = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
             String imagePath = images.get(0).getPath();
-            Glide.with(getApplicationContext()).load(new File(imagePath)).into(itemImage);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-
-//            options.inSampleSize = 4;
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            itemImage.setImageBitmap(bitmap);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             byte[] bytesImage = byteArrayOutputStream.toByteArray();
             _rawImage = Base64.encodeToString(bytesImage, Base64.DEFAULT);
 

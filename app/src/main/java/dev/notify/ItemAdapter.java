@@ -3,15 +3,24 @@ package dev.notify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+
 
 
 /**
@@ -19,14 +28,61 @@ import java.util.List;
  */
 
 class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
+    private String TAG = "itemAdapter";
     private List<Item> itemList;
     private Context context;
 
-    ItemAdapter(Context context, List<Item> itemList){
-        this.context = context;
+    public ItemAdapter(List<Item> itemList, Context context) {
         this.itemList = itemList;
+        this.context = context;
+        Log.d(TAG, "ItemAdapter: "+itemList.size());
     }
 
+
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_cardview, parent, false);
+        return new MyViewHolder(view);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+
+        holder.data_name.setText(itemList.get(position).getName());
+        holder.data_amount.setText(Integer.toString(itemList.get(position).getAmount()));
+        String date = null;
+        try {
+
+            Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(itemList.get(position).getExpire());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateFormat);
+            int day = calendar.get(Calendar.DAY_OF_MONTH)+1;
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            date = day + "-" + month + "-" + year;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        holder.data_date.setText(date);
+        holder.data_member.setText(itemList.get(position).getMember());
+
+        //Encode Image And SetImage
+        String stringEncodeImage = itemList.get(position).getImage();
+        byte[] decodeImage = Base64.decode(stringEncodeImage, Base64.DEFAULT);
+        Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
+
+        //Set Image
+        holder.data_image.setImageBitmap(bitmapImage);
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemList.size();
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView data_name, data_amount, data_date, data_member;
@@ -41,38 +97,5 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
             data_date = (TextView) view.findViewById(R.id.data_created);
             data_member = (TextView) view.findViewById(R.id.data_member);
         }
-    }
-
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View View = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cardview, parent, false);
-        return new MyViewHolder(View);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-
-        holder.data_name.setText(itemList.get(position).getName());
-        holder.data_amount.setText(String.valueOf(itemList.get(position).getAmount()));
-        holder.data_date.setText(itemList.get(position).getExpire());
-        holder.data_member.setText(itemList.get(position).getMember());
-
-        //Encode Image And SetImage
-        String stringEncodeImage = itemList.get(position).getImage();
-        byte[] decodeImage = Base64.decode(stringEncodeImage, Base64.DEFAULT);
-        Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
-
-        //Set Image
-        holder.data_image.setImageBitmap(bitmapImage);
-
-
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return itemList.size();
     }
 }
