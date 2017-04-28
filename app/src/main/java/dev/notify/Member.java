@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.daimajia.swipe.SwipeLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,8 +71,7 @@ public class Member extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), AddItem.class));
             }
         });
-
-
+        
     }
 
     private void getItemToRecycler() {

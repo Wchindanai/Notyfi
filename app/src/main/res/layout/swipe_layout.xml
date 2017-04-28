@@ -1,0 +1,72 @@
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ชื่อ : "/>
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/name_label"/>
+
+    <TextView
+        android:id="@+id/label_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_label"
+        android:text="จำนวน : "/>
+
+    <TextView
+        android:id="@+id/item_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_name"
+        android:layout_toEndOf="@+id/label_amount"/>
+
+    <TextView
+        android:id="@+id/label_expire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_amount"
+        android:text="วันหมดอายุ : "/>
+
+    <TextView
+        android:id="@+id/item_expire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/label_expire"
+        android:layout_below="@id/item_amount"/>
+
+    <TextView
+        android:id="@+id/label_created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_expire"
+        android:text="วันที่สร้าง : "/>
+    <TextView
+        android:id="@+id/item_created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/label_created"
+        android:layout_below="@+id/item_expire"/>
+
+    <TextView
+        android:id="@+id/label_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_created"
+        android:text="เจ้าของ : "/>
+    <TextView
+        android:id="@+id/item_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/label_member"
+        android:layout_below="@+id/item_created"/>
+
+
+
+</RelativeLayout>

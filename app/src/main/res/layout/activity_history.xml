@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context="dev.notify.History">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/history_rv"
+        android:layout_width="344dp"
+        android:layout_height="495dp"
+        android:scrollbars="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>
