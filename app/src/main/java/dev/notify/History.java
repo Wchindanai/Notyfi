@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,17 +22,22 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class History extends AppCompatActivity {
+    private static final String TAG = "History";
     List<HistoryModel> listHistory;
     RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        getDataFromCloud();
+
+
         recyclerView = (RecyclerView) findViewById(R.id.history_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         listHistory = new ArrayList<>();
-        getDataFromCloud();
+
     }
 
     private void getDataFromCloud() {
@@ -42,23 +48,30 @@ public class History extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getApplicationContext(), "Please Check Your Internet Conenction", Toast.LENGTH_LONG).show();
+                History.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Please Check Your Internet Conenction", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
+
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                JSONArray jsonArray = null;
                 try {
-                    jsonArray = new JSONArray(response.body().string());
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    for (int i = 0 ; i < jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String itemName = (String) jsonObject.get("name");
-                        int itemAmount = (int) jsonObject.get("amount");
-                        String itemMember = (String) jsonObject.get("users_username");
-                        String itemCreated = (String) jsonObject.get("created");
-                        String itemExpire_date = (String) jsonObject.get("expire_date");
-                        sendToObject(itemName, itemAmount, itemExpire_date, itemCreated, itemMember);
+                        Log.d(TAG, "onResponse: "+jsonObject);
+                        String name = (String) jsonObject.get("name");
+                        String created = (String) jsonObject.get("created");
+                        String expire = (String) jsonObject.get("expire_date");
+                        String member = (String) jsonObject.get("users_username");
+                        int amount = (int) jsonObject.get("amount");
+                        sendToObject(name, amount, expire, created, member);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

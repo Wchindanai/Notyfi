@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ import java.util.List;
  */
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
+    private static final String TAG = "HistoryAdapter";
     List<HistoryModel> listHistory;
     Context context;
 
     public HistoryAdapter(List<HistoryModel> listHistory, Context context) {
+        Log.d(TAG, "HistoryAdapter: "+ listHistory.size());
         this.listHistory = listHistory;
         this.context = context;
     }
@@ -32,7 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
 
     @Override
     public HistoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.swipe_layout, parent);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.swipe_layout, parent, false);
         return new MyViewHolder(v);
     }
 
@@ -65,13 +68,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             int year = calendar.get(Calendar.YEAR);
             int hours = calendar.get(Calendar.HOUR);
             int minute = calendar.get(Calendar.MINUTE);
-            expire_date = day + "-" + month + "-" + year + " " + hours + ":" + minute;
+            created_date = day + "-" + month + "-" + year + " " + hours + ":" + minute;
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         holder.data_expire.setText(expire_date);
-        holder.data_create.setText(listHistory.get(position).getCreated());
+        holder.data_create.setText(created_date);
         holder.data_member.setText(listHistory.get(position).getMember());
 
     }
@@ -85,7 +88,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
         TextView data_name, data_amount, data_create, data_expire, data_member;
         public MyViewHolder(View itemView) {
             super(itemView);
-            data_name = (TextView) itemView.findViewById(R.id.input_name);
+            data_name = (TextView) itemView.findViewById(R.id.item_name);
             data_amount = (TextView) itemView.findViewById(R.id.item_amount);
             data_create = (TextView) itemView.findViewById(R.id.item_created);
             data_expire = (TextView) itemView.findViewById(R.id.item_expire);

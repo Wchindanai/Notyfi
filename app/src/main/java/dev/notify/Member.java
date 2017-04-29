@@ -69,9 +69,10 @@ public class Member extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), AddItem.class));
+                finish();
             }
         });
-        
+
     }
 
     private void getItemToRecycler() {

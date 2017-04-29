@@ -11,6 +11,7 @@
         android:layout_width="344dp"
         android:layout_height="495dp"
         android:scrollbars="vertical"
+        android:padding="5dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
