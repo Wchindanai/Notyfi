@@ -1,6 +1,8 @@
 package dev.notify;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -152,10 +154,26 @@ public class AddItem extends AppCompatActivity {
 
             try {
 
+                alarmNoti(notification);
+
                 sentToServer(item);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+    }
+
+    private void alarmNoti(String notification) {
+        boolean alarm = (PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("ALARM"), PendingIntent.FLAG_NO_CREATE) == null);
+        if(alarm){
+            Intent itAlarm = new Intent("ALARM");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,itAlarm,0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.SECOND, 3);
+            AlarmManager alarme = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarme.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),60000, pendingIntent);
         }
 
     }

@@ -121,8 +121,6 @@ public class Member extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
 
