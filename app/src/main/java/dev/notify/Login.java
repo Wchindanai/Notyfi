@@ -68,7 +68,6 @@ public class Login extends AppCompatActivity  {
 
         //Check Login Status From SharedPreference
         int loginStatus = sharedPreferences.getInt("login", 0);
-        Log.d(TAG, "LoginStatus: "+loginStatus);
         if(loginStatus == 1){
             String user_type = sharedPreferences.getString("user_type", null);
             if(Objects.equals(user_type, "admin")){

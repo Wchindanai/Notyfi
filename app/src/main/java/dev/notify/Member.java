@@ -1,5 +1,6 @@
 package dev.notify;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -76,9 +77,11 @@ public class Member extends AppCompatActivity {
     }
 
     private void getItemToRecycler() {
+        String user = getUser();
+        String url = "https://notify-163706.appspot.com/api/items?filter={\"where\":{\"users_username\":\" " + user + "\"}}";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items")
+                .url(url)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -123,6 +126,13 @@ public class Member extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String getUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences("notify", Context.MODE_PRIVATE);
+
+        String user = sharedPreferences.getString("username", null);
+        return user;
     }
 
     @Override

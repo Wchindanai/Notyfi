@@ -1,5 +1,7 @@
 package dev.notify;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,6 +28,9 @@ public class History extends AppCompatActivity {
     private static final String TAG = "History";
     List<HistoryModel> listHistory;
     RecyclerView recyclerView;
+
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +47,11 @@ public class History extends AppCompatActivity {
     }
 
     private void getDataFromCloud() {
+        String user = getUser();
+        String url = "https://notify-163706.appspot.com/api/items?filter={\"where\":{\"users_username\":\" " + user + "\"}}";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items")
+                .url(url)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -85,6 +93,13 @@ public class History extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private String getUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences("notify", Context.MODE_PRIVATE);
+
+        String user = sharedPreferences.getString("username", null);
+        return user;
     }
 
     private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember) {

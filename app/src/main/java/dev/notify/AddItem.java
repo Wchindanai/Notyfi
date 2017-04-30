@@ -85,7 +85,7 @@ public class AddItem extends AppCompatActivity {
         coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
 
         SharedPreferences sharedPreferences = getSharedPreferences("notify", Context.MODE_PRIVATE);
-        ;
+
         user = sharedPreferences.getString("username", null);
         itemUser.setText(user);
 
@@ -151,6 +151,7 @@ public class AddItem extends AppCompatActivity {
             Item item = new Item(0, name, amount, member, _rawImage, expire);
 
             try {
+
                 sentToServer(item);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -197,6 +198,7 @@ public class AddItem extends AppCompatActivity {
                 AddItem.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         startActivity(new Intent(getApplicationContext(), Member.class));
                         finish();
                     }
