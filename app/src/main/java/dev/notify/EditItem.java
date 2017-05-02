@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,7 @@ import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,10 +49,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
-public class AddItem extends AppCompatActivity {
+/**
+ * Created by dream on 5/2/2017 AD.
+ */
 
-    private static final String TAG = "AddItem";
+public class EditItem extends AppCompatActivity {
+    private static final String TAG = "EditItem";
     EditText itemName;
     EditText itemAmount;
     EditText itemExpire;
@@ -69,11 +73,12 @@ public class AddItem extends AppCompatActivity {
     int IMAGE_PICKER = 100;
 
     private String _rawImage = "";
+    int _id;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.content_edit_item);
         itemName = (EditText) findViewById(R.id.input_name);
         itemAmount = (EditText) findViewById(R.id.input_amount);
         itemExpire = (EditText) findViewById(R.id.item_expire);
@@ -92,6 +97,7 @@ public class AddItem extends AppCompatActivity {
         itemUser.setText(user);
 
         selectDateExpire.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 showDatePicker();
@@ -99,6 +105,7 @@ public class AddItem extends AppCompatActivity {
         });
 
         selectDateNoti.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 selectNoti();
@@ -111,6 +118,9 @@ public class AddItem extends AppCompatActivity {
                 imagePicker();
             }
         });
+        Bundle bundle = getIntent().getExtras();
+        _id = bundle.getInt("id");
+        fetchDataFromServer(_id);
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -125,11 +135,69 @@ public class AddItem extends AppCompatActivity {
         });
     }
 
+    private void fetchDataFromServer(int id) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://notify-163706.appspot.com/api/items/" + id)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: " + e);
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    final String name = (String) jsonObject.get("name");
+                    final int amount = (int) jsonObject.get("amount");
+                    final String member = (String) jsonObject.get("users_username");
+                    String expire = (String) jsonObject.get("expire_date");
+
+                    String date = "";
+                    try {
+
+                        Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(expire);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dateFormat);
+                        int day = calendar.get(Calendar.DAY_OF_MONTH)+1;
+                        int month = calendar.get(Calendar.MONTH)+1;
+                        int year = calendar.get(Calendar.YEAR);
+                        date = day + "-" + month + "-" + year;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    final String finalDate = date;
+                    EditItem.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            itemName.setText(name);
+                            itemAmount.setText(String.valueOf(amount));
+                            itemUser.setText(member);
+                        }
+                    });
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        });
+    }
+
     private void submit() throws ParseException {
         String name = itemName.getText().toString();
         int amount = Integer.parseInt(itemAmount.getText().toString());
         String member = itemUser.getText().toString();
         String expire = itemExpire.getText().toString();
+        Log.d(TAG, "submit: "+ expire);
         String notification = itemNotification.getText().toString();
 
         Boolean cancel = false;
@@ -142,7 +210,7 @@ public class AddItem extends AppCompatActivity {
             cancel = true;
         } else if (amount == 0) {
             itemAmount.setError("Fill this field");
-            ;
+
             focusView = itemAmount;
             cancel = true;
         }
@@ -155,7 +223,7 @@ public class AddItem extends AppCompatActivity {
             }
 
 
-            Item item = new Item(0, name, amount, member, _rawImage, expire);
+            Item item = new Item(_id, name, amount, member, _rawImage, expire);
 
             try {
 
@@ -170,9 +238,9 @@ public class AddItem extends AppCompatActivity {
 
     private void setNotification(String notification) throws ParseException {
         java.util.Calendar sevendayalarm = java.util.Calendar.getInstance();
-        Date d = new SimpleDateFormat("yyyy-MM-dd").parse(notification);
+        Date d = new SimpleDateFormat("yyyy-M-dd").parse(notification);
         sevendayalarm.setTime(d);
-        Log.d(TAG, "setNotification: "+ sevendayalarm.getTime());
+        Log.d(TAG, "setNotification: " + sevendayalarm.getTime());
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
 
@@ -190,15 +258,16 @@ public class AddItem extends AppCompatActivity {
         json.put("expire_date", item.getExpire());
         json.put("users_username", item.getMember());
         json.put("picture", item.getImage());
+        Log.d(TAG, "sentToServer: "+json.toString());
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items")
-                .post(body)
+                .url("https://notify-163706.appspot.com/api/items/"+_id)
+                .patch(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                AddItem.this.runOnUiThread(new Runnable() {
+                EditItem.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Snackbar snackbar = Snackbar.make(coordinator, "Cannot Add Item", Snackbar.LENGTH_LONG);
@@ -210,12 +279,7 @@ public class AddItem extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    JSONObject jsonResponse = new JSONObject(response.body().string());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                AddItem.this.runOnUiThread(new Runnable() {
+                EditItem.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
@@ -238,6 +302,7 @@ public class AddItem extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void selectNoti() {
         Calendar calender = Calendar.getInstance();
         NotificationDateFragment dialogFragment = new NotificationDateFragment();
@@ -262,6 +327,7 @@ public class AddItem extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void showDatePicker() {
         DatePickerFragment date = new DatePickerFragment();
         Calendar calender = Calendar.getInstance();
@@ -301,4 +367,6 @@ public class AddItem extends AppCompatActivity {
 
         }
     }
+
+
 }
