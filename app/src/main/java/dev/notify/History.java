@@ -48,7 +48,7 @@ public class History extends AppCompatActivity {
 
     private void getDataFromCloud() {
         String user = getUser();
-        String url = "https://notify-163706.appspot.com/api/items?filter={\"where\":{\"users_username\":\" " + user + "\"}}";
+        String url = "https://notify-163706.appspot.com/api/items?filter={\"where\":{\"users_username\":\"" + user + "\"}}";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
