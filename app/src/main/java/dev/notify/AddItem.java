@@ -68,7 +68,7 @@ public class AddItem extends AppCompatActivity {
 
     int IMAGE_PICKER = 100;
 
-    private String _rawImage = "";
+    private String _rawImage = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,11 +138,9 @@ public class AddItem extends AppCompatActivity {
         if (TextUtils.isEmpty(name)) {
             itemName.setError("Fill this field");
             focusView = itemName;
-
             cancel = true;
         } else if (amount == 0) {
             itemAmount.setError("Fill this field");
-            ;
             focusView = itemAmount;
             cancel = true;
         }
