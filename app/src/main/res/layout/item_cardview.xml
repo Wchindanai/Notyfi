@@ -97,6 +97,23 @@
                 android:paddingBottom="10dp"
                 android:text="member" />
 
+            <Button
+                android:id="@+id/delBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_alignBaseline="@+id/data_member"
+                android:layout_alignBottom="@+id/data_member"
+                android:layout_alignParentEnd="true" />
+
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/delBtn"
+                android:layout_alignParentEnd="true"
+                android:text="Edit" />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
