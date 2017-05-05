@@ -4,12 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,7 @@ public class Register extends AppCompatActivity {
     Button registerBtn;
     View registerForm;
     View registerProgress;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class Register extends AppCompatActivity {
         registerBtn = (Button)findViewById(R.id.registerBtn);
         registerForm = findViewById(R.id.register_form);
         registerProgress = findViewById(R.id.register_progress);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +184,7 @@ public class Register extends AppCompatActivity {
                     Register.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                             finish();
                         }
