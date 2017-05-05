@@ -190,7 +190,7 @@ public class AddItem extends AppCompatActivity {
         json.put("picture", item.getImage());
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items")
+                .url("https://notify-166704.appspot.com/api/items")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

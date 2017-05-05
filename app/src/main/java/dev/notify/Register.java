@@ -161,7 +161,7 @@ public class Register extends AppCompatActivity {
 
 
     private void postData(JSONObject json) {
-        String url = "https://notify-163706.appspot.com/api/users";
+        String url = "https://notify-166704.appspot.com/api/users";
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, json.toString());

@@ -122,7 +122,7 @@ public class Login extends AppCompatActivity  {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("username", username);
         jsonObject.put("password", password);
-        String url = "https://notify-163706.appspot.com/api/users/count?where="+jsonObject.toString();
+        String url = "https://notify-166704.appspot.com/api/users/count?where="+jsonObject.toString();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

@@ -47,7 +47,7 @@ public class Admin extends AppCompatActivity {
 
     private void getDataFromCloud() {
         String user = getUser();
-        String url = "https://notify-163706.appspot.com/api/items";
+        String url = "https://notify-166704.appspot.com/api/items";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
