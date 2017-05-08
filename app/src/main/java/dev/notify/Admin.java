@@ -1,12 +1,15 @@
 package dev.notify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -33,15 +36,11 @@ public class Admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
-        getDataFromCloud();
-
-
+        setContentView(R.layout.activity_admin);
         recyclerView = (RecyclerView) findViewById(R.id.adRv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         listHistory = new ArrayList<>();
+        getDataFromCloud();
 
     }
 
@@ -103,6 +102,27 @@ public class Admin extends AppCompatActivity {
     private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember) {
         HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount);
         listHistory.add(history);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.admin_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sign_out:
+                SharedPreferences sharedPreferences = getSharedPreferences("notify", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

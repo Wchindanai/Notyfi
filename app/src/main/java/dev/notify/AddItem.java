@@ -2,7 +2,10 @@ package dev.notify;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
@@ -69,6 +73,7 @@ public class AddItem extends AppCompatActivity {
     int IMAGE_PICKER = 100;
 
     private String _rawImage = " ";
+    private EditText inputNotiTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +90,19 @@ public class AddItem extends AppCompatActivity {
         add = (Button) findViewById(R.id.addItem);
         itemImage = (ImageView) findViewById(R.id.imageView);
         coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
+        inputNotiTime = (EditText) findViewById(R.id.notification_time);
 
         SharedPreferences sharedPreferences = getSharedPreferences("notify", Context.MODE_PRIVATE);
 
         user = sharedPreferences.getString("username", null);
         itemUser.setText(user);
+
+        inputNotiTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePicker();
+            }
+        });
 
         selectDateExpire.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,13 +138,16 @@ public class AddItem extends AppCompatActivity {
         });
     }
 
+
+
     private void submit() throws ParseException {
         String name = itemName.getText().toString();
         int amount = Integer.parseInt(itemAmount.getText().toString());
         String member = itemUser.getText().toString();
         String expire = itemExpire.getText().toString();
         String notification = itemNotification.getText().toString();
-
+        String time = inputNotiTime.getText().toString();
+        notification = notification + " " + time;
         Boolean cancel = false;
         View focusView = null;
 
@@ -168,7 +184,7 @@ public class AddItem extends AppCompatActivity {
 
     private void setNotification(String notification) throws ParseException {
         java.util.Calendar sevendayalarm = java.util.Calendar.getInstance();
-        Date d = new SimpleDateFormat("yyyy-MM-dd").parse(notification);
+        Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(notification);
         sevendayalarm.setTime(d);
         Log.d(TAG, "setNotification: "+ sevendayalarm.getTime());
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -190,7 +206,7 @@ public class AddItem extends AppCompatActivity {
         json.put("picture", item.getImage());
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
-                .url("https://notify-166704.appspot.com/api/items")
+                .url("https://notify-163706.appspot.com/api/items")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -235,6 +251,20 @@ public class AddItem extends AppCompatActivity {
 
 
     }
+
+    private void showTimePicker() {
+        NotificationTimeFragment newFragment = new NotificationTimeFragment();
+        newFragment.setCallBack(timeSetListener);
+        newFragment.show(getFragmentManager(), "Time Picker");
+    }
+
+    private TimePickerDialog.OnTimeSetListener timeSetListener =  new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            inputNotiTime.setText(hourOfDay + ":" + minute );
+        }
+    };
+
 
     private void selectNoti() {
         Calendar calender = Calendar.getInstance();

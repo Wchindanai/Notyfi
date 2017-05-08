@@ -50,7 +50,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(listHistory.get(position).getExpire());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateFormat);
-            int day = calendar.get(Calendar.DAY_OF_MONTH)+1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
             expire_date = day + "-" + month + "-" + year;
@@ -63,7 +63,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(listHistory.get(position).getCreated());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateFormat);
-            int day = calendar.get(Calendar.DAY_OF_MONTH)+1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
             int hours = calendar.get(Calendar.HOUR);

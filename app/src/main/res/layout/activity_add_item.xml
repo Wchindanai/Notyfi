@@ -123,8 +123,19 @@
                     android:padding="5dp"
                     android:src="@drawable/ic_date_range_white_24dp" />
 
-
             </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/notification_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="เวลาที่ต้องการแจ้งเตือน"
+                    android:inputType="time"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
 
 
             <ImageView

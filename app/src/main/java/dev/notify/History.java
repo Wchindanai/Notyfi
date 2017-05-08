@@ -35,7 +35,7 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        getDataFromCloud();
+
 
 
         recyclerView = (RecyclerView) findViewById(R.id.history_rv);
@@ -43,6 +43,7 @@ public class History extends AppCompatActivity {
 
 
         listHistory = new ArrayList<>();
+        getDataFromCloud();
 
     }
 

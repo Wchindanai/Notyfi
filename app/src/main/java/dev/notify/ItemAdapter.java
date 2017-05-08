@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import android.support.v7.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -68,7 +70,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
             Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(itemList.get(position).getExpire());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateFormat);
-            int day = calendar.get(Calendar.DAY_OF_MONTH)+1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH)+1;
             int year = calendar.get(Calendar.YEAR);
             date = day + "-" + month + "-" + year;
@@ -82,10 +84,13 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
         //Encode Image And SetImage
         String stringEncodeImage = itemList.get(position).getImage();
         byte[] decodeImage = Base64.decode(stringEncodeImage, Base64.DEFAULT);
-        Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
+        Glide.with(context).load(decodeImage).asBitmap().into(holder.data_image);
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 2;
+//        Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length, options);
 
-        //Set Image
-        holder.data_image.setImageBitmap(bitmapImage);
+//        Set Image
+//        holder.data_image.setImageBitmap(bitmapImage);
 
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +124,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
                             }
 
                             private void deleteItem(int id) {
-                                String url = "https://notify-163706.appspot.com/api/items/"+id;
+                                String url = "https://notify-166704.appspot.com/api/items/"+id;
                                 OkHttpClient client = new OkHttpClient();
                                 Request request = new Request.Builder()
                                         .url(url)
