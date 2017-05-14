@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +25,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static dev.notify.R.attr.layoutManager;
+
 public class History extends AppCompatActivity {
     private static final String TAG = "History";
     List<HistoryModel> listHistory;
@@ -41,6 +44,9 @@ public class History extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.history_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                1);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         listHistory = new ArrayList<>();
         getDataFromCloud();
@@ -78,8 +84,13 @@ public class History extends AppCompatActivity {
                         String created = (String) jsonObject.get("created");
                         String expire = (String) jsonObject.get("expire_date");
                         String member = (String) jsonObject.get("users_username");
+                        boolean isOut = (boolean) jsonObject.get("is_out");
+                        String outDate = jsonObject.optString("out_date");
                         int amount = (int) jsonObject.get("amount");
-                        sendToObject(name, amount, expire, created, member);
+                        if (!isOut){
+                            outDate = "-";
+                        }
+                        sendToObject(name, amount, expire, created, member, outDate);
 
                     }
                 } catch (JSONException e) {
@@ -103,8 +114,8 @@ public class History extends AppCompatActivity {
         return user;
     }
 
-    private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember) {
-        HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount);
+    private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember, String outDate) {
+        HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount, outDate);
         listHistory.add(history);
     }
 }

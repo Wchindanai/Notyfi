@@ -91,7 +91,7 @@ public class Login extends AppCompatActivity  {
         finish();
     }
 
-    private UsersModel login() {
+    private void login() {
         boolean cancel = false;
         View focusView = null;
         String username = usernameEditText.getText().toString();
@@ -114,7 +114,6 @@ public class Login extends AppCompatActivity  {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
 
@@ -145,8 +144,8 @@ public class Login extends AppCompatActivity  {
                 JSONObject json ;
                 try {
                     json = new JSONObject(jsonData);
-                    String count = json.getString("count");
-                    if(count == "0"){
+                    int count = (int) json.get("count");
+                    if(count == 0){
                         //Fail Login
                         Login.this.runOnUiThread(new Runnable() {
                             @Override
@@ -161,7 +160,6 @@ public class Login extends AppCompatActivity  {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         //Go to admin page
                         if(Objects.equals(username, "admin")){
-                            Log.i(TAG, "user_type: ADMIN");
                             //Set Share Preference
                             editor.putInt("login", 1);
                             editor.putString("user_type", "admin");

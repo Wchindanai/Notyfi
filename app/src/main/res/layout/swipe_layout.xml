@@ -66,6 +66,20 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/label_member"
         android:layout_below="@+id/item_created"/>
+    <TextView
+        android:id="@+id/item_isOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/label_member"
+        android:layout_below="@id/label_member"
+        android:text="วันที่นำออก : " />
+    <TextView
+        android:id="@+id/item_outDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_member"
+        android:layout_toEndOf="@id/item_isOut"
+        android:text="-"/>
 
 
 

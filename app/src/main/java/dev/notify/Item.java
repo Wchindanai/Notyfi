@@ -6,8 +6,9 @@ package dev.notify;
 
 public class Item {
 
-    private String name, expire, member, image;
+    private String name, expire, member, image, outDate;
     private int amount, id;
+    private boolean isOut;
 
 
     public String getExpire() {
@@ -28,20 +29,22 @@ public class Item {
 
     /**
      * @param name
-     * @param expire
      * @param amount
-
      * @param member
      * @param image
      * @param expire
+     * @param outDate
+     * @param isOut
      */
-    public Item(int id,String name, int amount, String member, String image, String expire){
+    public Item(int id, String name, int amount, String member, String image, String expire, String outDate, boolean isOut){
         this.id = id;
         this.name = name;
         this.amount = amount;
         this.expire = expire;
         this.member = member;
         this.image = image;
+        this.outDate = outDate;
+        this.isOut = isOut;
     }
 
     public String getName(){
@@ -75,5 +78,21 @@ public class Item {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isOut() {
+        return isOut;
+    }
+
+    public void setOut(boolean out) {
+        isOut = out;
+    }
+
+    public String getOutDate() {
+        return outDate;
+    }
+
+    public void setOutDate(String outDate) {
+        this.outDate = outDate;
     }
 }

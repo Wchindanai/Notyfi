@@ -2,8 +2,6 @@ package dev.notify;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -169,11 +167,11 @@ public class AddItem extends AppCompatActivity {
             }
 
 
-            Item item = new Item(0, name, amount, member, _rawImage, expire);
+            Item item = new Item(0, name, amount, member, _rawImage, expire, "", false);
 
             try {
 
-                setNotification(notification);
+                setNotification(notification, name);
                 sentToServer(item);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -182,12 +180,12 @@ public class AddItem extends AppCompatActivity {
 
     }
 
-    private void setNotification(String notification) throws ParseException {
+    private void setNotification(String notification, String name) throws ParseException {
         java.util.Calendar sevendayalarm = java.util.Calendar.getInstance();
         Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(notification);
         sevendayalarm.setTime(d);
-        Log.d(TAG, "setNotification: "+ sevendayalarm.getTime());
         Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.setAction(name);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
 
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -206,7 +204,7 @@ public class AddItem extends AppCompatActivity {
         json.put("picture", item.getImage());
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items")
+                .url("https://notify-166704.appspot.com/api/items")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

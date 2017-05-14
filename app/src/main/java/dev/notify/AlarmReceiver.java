@@ -22,6 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent intent1 = new Intent(context, Login.class);
+        String item = intent.getAction();
         intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 100, intent1,
@@ -31,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Notify App")
-                .setContentText("This is notification from Notify App")
+                .setContentText(item + " will be expire")
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());

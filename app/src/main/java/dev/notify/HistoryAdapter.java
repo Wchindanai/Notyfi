@@ -42,8 +42,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(HistoryAdapter.MyViewHolder holder, int position) {
-        holder.data_name.setText(listHistory.get(position).getName());
-        holder.data_amount.setText(String.valueOf(listHistory.get(position).getAmount()));
         String expire_date = null;
 
         try {
@@ -73,9 +71,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             e.printStackTrace();
         }
 
+        holder.data_name.setText(listHistory.get(position).getName());
+        holder.data_amount.setText(String.valueOf(listHistory.get(position).getAmount()));
         holder.data_expire.setText(expire_date);
         holder.data_create.setText(created_date);
         holder.data_member.setText(listHistory.get(position).getMember());
+        holder.data_outDate.setText(listHistory.get(position).getOutDate());
 
     }
 
@@ -85,7 +86,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView data_name, data_amount, data_create, data_expire, data_member;
+        TextView data_name, data_amount, data_create, data_expire, data_member, data_outDate;
         public MyViewHolder(View itemView) {
             super(itemView);
             data_name = (TextView) itemView.findViewById(R.id.item_name);
@@ -93,6 +94,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             data_create = (TextView) itemView.findViewById(R.id.item_created);
             data_expire = (TextView) itemView.findViewById(R.id.item_expire);
             data_member = (TextView) itemView.findViewById(R.id.item_member);
+            data_outDate = (TextView) itemView.findViewById(R.id.item_outDate);
 
         }
     }

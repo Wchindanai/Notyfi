@@ -31,7 +31,8 @@
                 android:layout_below="@+id/imageItem"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/item_label_name" />
+                android:text="@string/item_label_name"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/data_name"
@@ -40,7 +41,8 @@
                 android:layout_alignBaseline="@+id/label_name"
                 android:layout_alignBottom="@+id/label_name"
                 android:layout_toEndOf="@+id/label_name"
-                android:text="name" />
+                android:text="name"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/label_amount"
@@ -50,7 +52,8 @@
                 android:layout_alignStart="@+id/label_name"
                 android:layout_below="@+id/label_name"
                 android:layout_marginTop="9dp"
-                android:text="@string/item_label_amount" />
+                android:text="@string/item_label_amount"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/data_amount"
@@ -59,7 +62,8 @@
                 android:layout_alignBaseline="@+id/label_amount"
                 android:layout_alignBottom="@+id/label_amount"
                 android:layout_toEndOf="@+id/label_amount"
-                android:text="amount" />
+                android:text="amount"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/label_date"
@@ -68,7 +72,8 @@
                 android:layout_alignStart="@+id/label_amount"
                 android:layout_below="@+id/label_amount"
                 android:layout_marginTop="9dp"
-                android:text="@string/item_label_date" />
+                android:text="@string/item_label_date"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/data_created"
@@ -76,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/label_date"
                 android:layout_toEndOf="@+id/label_date"
-                android:text="date" />
+                android:text="date"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/label_member"
@@ -85,7 +91,8 @@
                 android:layout_alignStart="@+id/label_date"
                 android:layout_below="@+id/label_date"
                 android:layout_marginTop="9dp"
-                android:text="@string/item_label_member" />
+                android:text="@string/item_label_member"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <TextView
                 android:id="@+id/data_member"
@@ -95,7 +102,8 @@
                 android:layout_alignBottom="@+id/label_member"
                 android:layout_toEndOf="@+id/label_member"
                 android:paddingBottom="10dp"
-                android:text="member" />
+                android:text="member"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <Button
                 android:id="@+id/delBtn"
@@ -113,6 +121,14 @@
                 android:layout_above="@+id/delBtn"
                 android:layout_alignParentEnd="true"
                 android:text="Edit" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/label_member"
+                android:layout_alignStart="@+id/label_amount"
+                android:text="เอาของออกตู้เย็น" />
 
         </RelativeLayout>
 

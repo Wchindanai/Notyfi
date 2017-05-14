@@ -75,7 +75,12 @@ public class Admin extends AppCompatActivity {
                         String expire = (String) jsonObject.get("expire_date");
                         String member = (String) jsonObject.get("users_username");
                         int amount = (int) jsonObject.get("amount");
-                        sendToObject(name, amount, expire, created, member);
+                        boolean isOut = (boolean) jsonObject.get("is_out");
+                        String outDate = jsonObject.optString("out_date");
+                        if (!isOut){
+                            outDate = "-";
+                        }
+                        sendToObject(name, amount, expire, created, member, outDate);
 
                     }
                 } catch (JSONException e) {
@@ -99,8 +104,8 @@ public class Admin extends AppCompatActivity {
         return user;
     }
 
-    private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember) {
-        HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount);
+    private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember, String outDate) {
+        HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount, outDate);
         listHistory.add(history);
     }
 

@@ -30,7 +30,6 @@ import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -223,7 +222,7 @@ public class EditItem extends AppCompatActivity {
             }
 
 
-            Item item = new Item(_id, name, amount, member, _rawImage, expire);
+            Item item = new Item(_id, name, amount, member, _rawImage, expire, "", false);
 
             try {
 
