@@ -137,7 +137,7 @@ public class EditItem extends AppCompatActivity {
     private void fetchDataFromServer(int id) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items/" + id)
+                .url("https://notify-166704.appspot.com/api/items/" + id)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
