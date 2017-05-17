@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,9 @@ public class Admin extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
         recyclerView = (RecyclerView) findViewById(R.id.adRv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                new LinearLayoutManager(getApplicationContext()).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
         listHistory = new ArrayList<>();
         getDataFromCloud();
 
