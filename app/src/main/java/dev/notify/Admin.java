@@ -43,12 +43,12 @@ public class Admin extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 new LinearLayoutManager(getApplicationContext()).getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        listHistory = new ArrayList<>();
         getDataFromCloud();
 
     }
 
     private void getDataFromCloud() {
+        listHistory = new ArrayList<>();
         String user = getUser();
         String url = "https://notify-166704.appspot.com/api/items";
         OkHttpClient client = new OkHttpClient();
@@ -130,8 +130,17 @@ public class Admin extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
                 break;
+            case R.id.history_admin:
+                getDataFromCloud();
+                break;
+            case R.id.expire_item:
+                getExpireItem();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getExpireItem() {
     }
 }
 
