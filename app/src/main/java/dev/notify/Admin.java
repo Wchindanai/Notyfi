@@ -18,7 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -141,6 +143,57 @@ public class Admin extends AppCompatActivity {
     }
 
     private void getExpireItem() {
+        listHistory = new ArrayList<>();
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        String url = String.format("https://notify-166704.appspot.com/api/items?{\"where\": {\"is_out\":false,\"expire_date\":\"%s\"}}", currentDateTimeString);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Admin.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Please Check Your Internet Conenction", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    for (int i = 0 ; i < jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String name = (String) jsonObject.get("name");
+                        String created = (String) jsonObject.get("created");
+                        String expire = (String) jsonObject.get("expire_date");
+                        String member = (String) jsonObject.get("users_username");
+                        int amount = (int) jsonObject.get("amount");
+                        boolean isOut = (boolean) jsonObject.get("is_out");
+                        String outDate = jsonObject.optString("out_date");
+                        if (!isOut){
+                            outDate = "-";
+                        }
+                        sendToObject(name, amount, expire, created, member, outDate);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Admin.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(new HistoryAdapter(listHistory, getApplicationContext()));
+                    }
+                });
+            }
+        });
     }
 }
 
