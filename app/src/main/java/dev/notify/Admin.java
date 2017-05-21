@@ -19,7 +19,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -144,8 +146,11 @@ public class Admin extends AppCompatActivity {
 
     private void getExpireItem() {
         listHistory = new ArrayList<>();
-        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-        String url = String.format("https://notify-166704.appspot.com/api/items?{\"where\": {\"is_out\":false,\"expire_date\":\"%s\"}}", currentDateTimeString);
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(c.getTime());
+        String url = String.format("https://notify-166704.appspot.com/api/items?filter={\"where\": {\"is_out\":false,\"expire_date\":{\"lt\":\"%s\"}}}", formattedDate);
+        Log.d(TAG, "getExpireItem: "+ url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
