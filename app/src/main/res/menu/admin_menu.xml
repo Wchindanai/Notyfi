@@ -6,4 +6,13 @@
         android:icon="@drawable/ic_exit_to_app_white_18dp"
         android:title="@string/sign_out"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/history_admin"
+        android:title="History"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/expire_item"
+        android:title="Expire Item"
+        app:showAsAction="never"/>
 </menu>

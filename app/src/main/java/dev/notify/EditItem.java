@@ -3,6 +3,7 @@ package dev.notify;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
@@ -61,6 +63,7 @@ public class EditItem extends AppCompatActivity {
     EditText itemUser;
     EditText itemNotification;
     ImageButton selectDateNoti;
+    EditText notificationTime;
     Button pickImage;
     Button add;
     ImageView itemImage;
@@ -86,6 +89,7 @@ public class EditItem extends AppCompatActivity {
         itemNotification = (EditText) findViewById(R.id.notify_expire);
         selectDateNoti = (ImageButton) findViewById(R.id.selectDateNoti);
         pickImage = (Button) findViewById(R.id.pickImage);
+        notificationTime = (EditText) findViewById(R.id.notification_time);
         add = (Button) findViewById(R.id.addItem);
         itemImage = (ImageView) findViewById(R.id.imageView);
         coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
@@ -121,6 +125,13 @@ public class EditItem extends AppCompatActivity {
         _id = bundle.getInt("id");
         fetchDataFromServer(_id);
 
+        notificationTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimepicker();
+            }
+        });
+
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +145,23 @@ public class EditItem extends AppCompatActivity {
         });
     }
 
+    private TimePickerDialog.OnTimeSetListener timeSetListener =  new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            notificationTime.setText(hourOfDay + ":" + minute );
+        }
+    };
+
+    private void showTimepicker() {
+        NotificationTimeFragment newFragment = new NotificationTimeFragment();
+        newFragment.setCallBack(timeSetListener);
+        newFragment.show(getFragmentManager(), "Time Picker");
+    }
+
     private void fetchDataFromServer(int id) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items/" + id)
+                .url("https://notify-166704.appspot.com/api/items/" + id)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -196,8 +220,9 @@ public class EditItem extends AppCompatActivity {
         int amount = Integer.parseInt(itemAmount.getText().toString());
         String member = itemUser.getText().toString();
         String expire = itemExpire.getText().toString();
-        Log.d(TAG, "submit: "+ expire);
-        String notification = itemNotification.getText().toString();
+        String time = notificationTime.getText().toString();
+        String notificationDate = itemNotification.getText().toString();
+        String notification = notificationDate + " " + time;
 
         Boolean cancel = false;
         View focusView = null;
@@ -226,7 +251,7 @@ public class EditItem extends AppCompatActivity {
 
             try {
 
-                setNotification(notification);
+                setNotification(notification, name);
                 sentToServer(item);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -235,12 +260,12 @@ public class EditItem extends AppCompatActivity {
 
     }
 
-    private void setNotification(String notification) throws ParseException {
+    private void setNotification(String notification, String name) throws ParseException {
         java.util.Calendar sevendayalarm = java.util.Calendar.getInstance();
-        Date d = new SimpleDateFormat("yyyy-M-dd").parse(notification);
+        Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(notification);
         sevendayalarm.setTime(d);
-        Log.d(TAG, "setNotification: " + sevendayalarm.getTime());
         Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.setAction(String.format("\"%s\"", name));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
 
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);

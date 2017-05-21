@@ -126,6 +126,17 @@
             </LinearLayout>
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/notification_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="เวลาแจ้งเตือน" />
+            </android.support.design.widget.TextInputLayout>
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
