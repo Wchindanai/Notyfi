@@ -285,7 +285,7 @@ public class EditItem extends AppCompatActivity {
         Log.d(TAG, "sentToServer: "+json.toString());
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
-                .url("https://notify-163706.appspot.com/api/items/"+_id)
+                .url("https://notify-166704.appspot.com/api/items/"+_id)
                 .patch(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
