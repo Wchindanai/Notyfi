@@ -10,7 +10,7 @@ public class HistoryModel {
     String created;
     String member;
     String outDate;
-    int amount;
+    int amount, id;
 
     public String getOutDate() {
         return outDate;
@@ -60,7 +60,16 @@ public class HistoryModel {
         this.amount = amount;
     }
 
-    public HistoryModel(String name, String expire, String created, String member, int amount, String outDate) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public HistoryModel(int id, String name, String expire, String created, String member, int amount, String outDate) {
+        this.id = id;
         this.name = name;
         this.expire = expire;
         this.created = created;

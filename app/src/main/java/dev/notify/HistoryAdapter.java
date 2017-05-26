@@ -42,8 +42,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(HistoryAdapter.MyViewHolder holder, int position) {
-        String expire_date = null;
 
+        String expire_date = null;
+        holder.itemView.setId(listHistory.get(position).getId());
         try {
             Date dateFormat = new SimpleDateFormat("EEEE MMM dd yyyy HH:mm:ss Z").parse(listHistory.get(position).getExpire());
             Calendar calendar = Calendar.getInstance();
@@ -98,4 +99,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
 
         }
     }
+
+
 }

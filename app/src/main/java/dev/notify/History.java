@@ -79,7 +79,7 @@ public class History extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(response.body().string());
                     for (int i = 0 ; i < jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Log.d(TAG, "onResponse: "+jsonObject);
+                        int id = (int) jsonObject.get("id");
                         String name = (String) jsonObject.get("name");
                         String created = (String) jsonObject.get("created");
                         String expire = (String) jsonObject.get("expire_date");
@@ -90,7 +90,7 @@ public class History extends AppCompatActivity {
                         if (!isOut){
                             outDate = "-";
                         }
-                        sendToObject(name, amount, expire, created, member, outDate);
+                        sendToObject(id,name, amount, expire, created, member, outDate);
 
                     }
                 } catch (JSONException e) {
@@ -114,8 +114,8 @@ public class History extends AppCompatActivity {
         return user;
     }
 
-    private void sendToObject(String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember, String outDate) {
-        HistoryModel history = new HistoryModel(itemName, itemExpire_date, itemCreated, itemMember, itemAmount, outDate);
+    private void sendToObject(int id, String itemName, int itemAmount, String itemExpire_date, String itemCreated, String itemMember, String outDate) {
+        HistoryModel history = new HistoryModel(id ,itemName, itemExpire_date, itemCreated, itemMember, itemAmount, outDate);
         listHistory.add(history);
     }
 }
