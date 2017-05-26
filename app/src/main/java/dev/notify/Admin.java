@@ -61,12 +61,9 @@ public class Admin extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 Toast.makeText(getApplication(), "Item Deleted", Toast.LENGTH_SHORT).show();
                 int id = viewHolder.itemView.getId();
-                //Remove swiped item from list and notify the RecyclerView
-//                Log.d(TAG, "onSwiped: "+ viewHolder.getLayoutPosition());
-//                listHistory.remove(viewHolder.getAdapterPosition());
-//                adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listHistory.size());
+                listHistory.remove(viewHolder.getAdapterPosition());
+                adapter = new HistoryAdapter(listHistory, getApplication());
                 deleteItem(id);
-//                adapter.notifyItemRemoved(viewHolder.getLayoutPosition());
 
             }
         };

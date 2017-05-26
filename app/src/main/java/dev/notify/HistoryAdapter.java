@@ -26,7 +26,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     Context context;
 
     public HistoryAdapter(List<HistoryModel> listHistory, Context context) {
-        Log.d(TAG, "HistoryAdapter: "+ listHistory.size());
         this.listHistory = listHistory;
         this.context = context;
     }
